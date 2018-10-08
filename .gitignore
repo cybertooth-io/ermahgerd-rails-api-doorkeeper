@@ -25,3 +25,10 @@
 
 # Ignore master key for decrypting credentials and more.
 /config/master.key
+
+# exclude postgres data
+/postgres
+
+# exclude redis data
+/redis
+/.gtm/
