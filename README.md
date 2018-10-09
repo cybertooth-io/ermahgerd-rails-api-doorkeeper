@@ -1,24 +1,39 @@
 # README
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Development - Getting Started
 
-Things you may want to cover:
+You need the following:
 
-* Ruby version
+* Ruby-2.5+
+* The `config/master.key` file
 
-* System dependencies
+Perform the following from the command line:
 
-* Configuration
+1. `bundle install` - will install any of the missing gems declared in the `Gemfile`
+1. `docker-compose up -d` - start up a Redis and PostgreSQL server in a container
+1. `rake db:create` - only required the first time, make sure your database is created
+1. `rake db:migrate` - run as required, your application will produce a stacktrace of errors if you're not up to date
+1. `rake db:seed_fu` - run as required, to seed the database with data
+1. `rake test` - run as required, test to make sure your API is behaving
+1. `rails s` - to serve the API on [http://localhost:3000](http://localhost:3000)
 
-* Database creation
+## Credentials
 
-* Database initialization
+As of Rails-5.2 secrets are hashed and locked down with the `config/master.key` file.  Run `rails credentials:help` for
+more information.
 
-* How to run the test suite
+Do you need to create a key?  Use `rake secret`
 
-* Services (job queues, cache servers, search engines, etc.)
+Do you need to edit some secrets?  Do it from the command line:
 
-* Deployment instructions
+```bash
+rails credentials:edit
+```
 
-* ...
+## Jobs
+
+_Coming soon_
+
+## Deployment
+
+_Coming soon_
