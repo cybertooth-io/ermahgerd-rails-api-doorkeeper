@@ -1,0 +1,14 @@
+sterling_archer:
+  email: sterling@isiservice.com
+  first_name: Sterling
+  last_name: Archer
+  nickname: Duchess
+  password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+
+mallory_archer:
+  email: mallory@isiservice.com
+  first_name: Mallory
+  last_name: Archer
+  nickname:
+  password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+

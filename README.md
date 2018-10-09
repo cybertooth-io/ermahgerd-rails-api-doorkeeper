@@ -27,10 +27,20 @@ Do you need to create a key?  Use `rake secret`
 Do you need to edit some secrets?  Do it from the command line:
 
 ```bash
-rails credentials:edit
+$ rails credentials:edit
 ```
 
-## Jobs
+## Database Seeds
+
+For development, feel free to edit the `db/fixtures/development/001_users.rb` file to add yourself.
+
+Seed the database with:
+
+```bash
+$ rake db:seed_fu
+```
+
+## Crons/Jobs/Queues
 
 _Coming soon_
 
