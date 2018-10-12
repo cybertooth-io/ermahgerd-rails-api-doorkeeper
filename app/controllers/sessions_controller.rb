@@ -1,4 +1,7 @@
 class SessionsController < ApplicationController
+  before_action :authorize_access_request!, only: [:destroy]
+
+  # login
   def create
     user = User.find_by!(email: params[:email])
 
@@ -15,12 +18,7 @@ class SessionsController < ApplicationController
         secure: Rails.env.production?
       )
 
-      response.set_cookie(
-        JWTSessions.refresh_cookie,
-        value: tokens[:refresh],
-        httponly: true,
-        secure: Rails.env.production?
-      )
+      # TODO: what do we do with the REFRESH token?  It is in Redis and is being accessed by JwtSession's Session class
 
       render json: { csrf: tokens[:csrf] }, status: :created
 
@@ -29,5 +27,15 @@ class SessionsController < ApplicationController
       raise JWTSessions::Errors::Unauthorized, 'Authentication failed'
 
     end
+  end
+
+  # logout
+  def destroy
+    session = JWTSessions::Session.new(payload: payload)
+    session.flush_by_access_payload
+
+    response.delete_cookie JWTSessions.access_cookie
+
+    render json: { data: {}, meta: {} }, status: :no_content
   end
 end

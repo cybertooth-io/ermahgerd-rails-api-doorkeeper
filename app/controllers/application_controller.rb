@@ -7,6 +7,12 @@ class ApplicationController < ActionController::API
 
   private
 
+  # The current_user can be found in the JWT payload
+  def current_user
+    @current_user ||= User.find(payload['user_id'])
+  end
+
+  # JSONAPI friendly unauthorized (401) handler
   def not_authorized(exception)
     render json: {
       errors: [{
@@ -21,6 +27,7 @@ class ApplicationController < ActionController::API
     }, status: :unauthorized
   end
 
+  # JSONAPI friendly not found (404) handler
   def not_found(exception)
     render json: {
       errors: [{

@@ -5,24 +5,21 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
     post login_url
 
     assert_response :not_found
-    assert cookies[JWTSessions.access_cookie].nil?
-    assert cookies[JWTSessions.refresh_cookie].nil?
+    refute cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in fails because the password is missing' do
     post login_url, params: { email: 'sterling@isiservice.com' }
 
     assert_response :unauthorized
-    assert cookies[JWTSessions.access_cookie].nil?
-    assert cookies[JWTSessions.refresh_cookie].nil?
+    refute cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in fails because the email and password do not match' do
     post login_url, params: { email: 'sterling@isiservice.com', password: 'secrets' }
 
     assert_response :unauthorized
-    assert cookies[JWTSessions.access_cookie].nil?
-    assert cookies[JWTSessions.refresh_cookie].nil?
+    refute cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging is successful' do
@@ -30,6 +27,27 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :created
     assert cookies[JWTSessions.access_cookie].present?
-    assert cookies[JWTSessions.refresh_cookie].present?
+  end
+
+  test 'when logging out without a session' do
+    delete logout_url
+
+    assert_response :unauthorized
+    assert_equal 'Token is not found', JSON.parse(response.body)['errors'].first['detail']
+  end
+
+  test 'when logging out with an access token in a cookie' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel 15.minutes.from_now
+
+    assert cookies[JWTSessions.access_cookie].present?
+
+    delete logout_url, headers: @headers
+
+    assert_response :no_content
+    refute cookies[JWTSessions.access_cookie].present?
   end
 end

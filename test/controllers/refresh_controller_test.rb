@@ -4,7 +4,7 @@ class RefreshControllerTest < ActionDispatch::IntegrationTest
   test 'when attempting to renew access token without an access cookie' do
     post renew_url
 
-    assert_response :unauthorized, 'Access token does not exist, therefore consider this unauthorized renewal'
+    assert_response :unauthorized
   end
 
   test 'when attempting to renew access token but without supplying the csrf token' do
@@ -12,34 +12,87 @@ class RefreshControllerTest < ActionDispatch::IntegrationTest
 
     post renew_url
 
-    assert_response :unauthorized, 'Access token not renewed because CSRF was missing'
+    assert_response :unauthorized
   end
 
-  test 'when renewing after signing in' do
+  test 'when renewing an access token one minute before access-expiry' do
+    Timecop.freeze
+
     login(users(:sterling_archer))
 
-    access_token_before_renew = cookies[JWTSessions.access_cookie]
+    Timecop.travel(59.minutes.from_now)
 
     post renew_url, headers: @headers
 
-    assert_response :created, 'Token was renewed'
-    assert_not_equal access_token_before_renew, cookies[JWTSessions.access_cookie], 'Access token has changed and is renewed'
+    assert_response :unauthorized
+    assert_equal 'Malicious activity detected', JSON.parse(response.body)['errors'].first['detail']
   end
 
-  test 'when attempting to refresh but the refresh token has expired' do
+  test 'when renewing an access token one minute after access-expiry' do
+    Timecop.freeze
+
     login(users(:sterling_archer))
+
+    Timecop.travel(61.minutes.from_now)
 
     post renew_url, headers: @headers
 
-    assert_response :created, 'Token was renewed'
+    assert_response :created
+  end
+
+  test 'when renewing an access token one minute after access-expiry and then attempting to use old CSRF' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel(61.minutes.from_now)
+
+    post renew_url, headers: @headers
+
+    assert_response :created
 
     new_headers = Hash.new
-    new_headers[JWTSessions.csrf_header] = ::JSON.parse(response.body)['csrf']
+    new_headers[JWTSessions.csrf_header] = JSON.parse(response.body)['csrf']
 
-    Timecop.travel(1.week.from_now)
+    Timecop.travel(5.minutes.from_now)
 
-    post renew_url, headers: new_headers
+    # attempt to delete user with old CSRF token (@headers has not been updated since call to `login(...)`)
+    assert_no_difference ['User.count'] do
+      delete v1_user_url(users(:mallory_archer).id), headers: @headers
+    end
 
-    assert_response :unauthorized, 'The refresh token has expired'
+    assert_response :unauthorized, 'CSRF token mismatch should have been detected'
+
+    # now attempt to delete with the newly issued CSRF
+    assert_difference ['User.count'], -1 do
+      delete v1_user_url(users(:mallory_archer).id), headers: new_headers
+    end
+
+    assert_response :no_content, 'Re-issued CSRF token was used, delete should complete successfully'
+  end
+
+  test 'when token refresh succeeds one minute BEFORE REFRESH expiry' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel(-1.second.from_now(1.week.from_now))
+
+    post renew_url, headers: @headers
+
+    assert_response :created
+  end
+
+  test 'when token refresh fails one minute AFTER REFRESH expiry' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel(1.second.from_now(1.week.from_now))
+
+    post renew_url, headers: @headers
+
+    assert_response :unauthorized
+    assert_equal 'Session expired', JSON.parse(response.body)['errors'].first['detail']
   end
 end
