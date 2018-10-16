@@ -17,10 +17,36 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
     assert_equal 2, ::JSON.parse(response.body)['data'].length
   end
 
+  test 'when accessing resource one second before access token expires' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel((JWTSessions.access_exp_time - 1).seconds.from_now)
+
+    get v1_users_url
+
+    assert_response :ok
+    assert_equal 2, ::JSON.parse(response.body)['data'].length
+  end
+
+  test 'when accessing resource one second after access token expires' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
+
+    get v1_users_url
+
+    assert_response :unauthorized
+    assert_equal 'Signature has expired', ::JSON.parse(response.body)['errors'].first['detail']
+  end
+
   test 'when show' do
     login(users(:sterling_archer))
 
-    get  v1_user_url(users(:mallory_archer))
+    get v1_user_url(users(:mallory_archer))
 
     assert_response :ok
     assert_equal 'mallory@isiservice.com', ::JSON.parse(response.body)['data']['attributes']['email']
