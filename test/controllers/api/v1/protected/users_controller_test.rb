@@ -1,9 +1,9 @@
 require 'test_helper'
 
-class V1::UsersControllerTest < ActionDispatch::IntegrationTest
+class Api::V1::Protected::UsersControllerTest < ActionDispatch::IntegrationTest
 
   test 'when attempting to access the index action without signing in' do
-    get v1_users_url
+    get api_v1_protected_users_url
 
     assert_response :unauthorized
   end
@@ -11,7 +11,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
   test 'when logging in to get authorized access to the index action' do
     login(users(:sterling_archer))
 
-    get v1_users_url
+    get api_v1_protected_users_url
 
     assert_response :ok
     assert_equal 2, ::JSON.parse(response.body)['data'].length
@@ -24,7 +24,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel((JWTSessions.access_exp_time - 1).seconds.from_now)
 
-    get v1_users_url
+    get api_v1_protected_users_url
 
     assert_response :ok
     assert_equal 2, ::JSON.parse(response.body)['data'].length
@@ -37,7 +37,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
 
-    get v1_users_url
+    get api_v1_protected_users_url
 
     assert_response :unauthorized
     assert_equal 'Signature has expired', ::JSON.parse(response.body)['errors'].first['detail']
@@ -46,7 +46,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
   test 'when show' do
     login(users(:sterling_archer))
 
-    get v1_user_url(users(:mallory_archer))
+    get api_v1_protected_user_url(users(:mallory_archer))
 
     assert_response :ok
     assert_equal 'mallory@isiservice.com', ::JSON.parse(response.body)['data']['attributes']['email']
@@ -56,7 +56,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
     login(users(:sterling_archer))
 
     assert_no_difference ['User.count'] do
-      delete v1_user_url(users(:mallory_archer))
+      delete api_v1_protected_user_url(users(:mallory_archer))
     end
 
     assert_response :unauthorized
@@ -66,7 +66,7 @@ class V1::UsersControllerTest < ActionDispatch::IntegrationTest
     login(users(:sterling_archer))
 
     assert_difference ['User.count'], -1 do
-      delete v1_user_url(users(:mallory_archer)), headers: @headers
+      delete api_v1_protected_user_url(users(:mallory_archer)), headers: @headers
     end
 
     assert_response :no_content

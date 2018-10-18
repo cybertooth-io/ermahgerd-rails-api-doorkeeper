@@ -7,6 +7,8 @@ class ActiveSupport::TestCase
   # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
+  USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_2) AppleWebKit/601.3.9 (KHTML, like Gecko) Version/9.0.2 Safari/601.3.9'
+
   # Set up fake Sidekiq queuing (see https://github.com/mperham/sidekiq/wiki/Testing#testing-worker-queueing-fake)
   Sidekiq::Testing.fake!
 
@@ -24,7 +26,7 @@ class ActiveSupport::TestCase
     Rails.logger.info "Logging in as #{user.email}"
     Rails.logger.info "------------------------------------------------------------------------------------------"
 
-    post login_url, params: { email: user.email, password: password }
+    post login_url, headers: {'User-Agent': USER_AGENT}, params: {email: user.email, password: password}
 
     @csrf_token = ::JSON.parse(response.body)['csrf']
     @headers = Hash.new

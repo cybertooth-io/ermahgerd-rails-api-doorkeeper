@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class SessionsControllerTest < ActionDispatch::IntegrationTest
+class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
   test 'when logging in fails because the email is missing' do
     post login_url
 
@@ -9,21 +9,23 @@ class SessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'when logging in fails because the password is missing' do
-    post login_url, params: { email: 'sterling@isiservice.com' }
+    post login_url, params: {email: 'sterling@isiservice.com'}
 
     assert_response :unauthorized
     refute cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in fails because the email and password do not match' do
-    post login_url, params: { email: 'sterling@isiservice.com', password: 'secrets' }
+    post login_url, params: {email: 'sterling@isiservice.com', password: 'secrets'}
 
     assert_response :unauthorized
     refute cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging is successful' do
-    post login_url, params: { email: 'sterling@isiservice.com', password: 'secret' }
+    assert_difference ['Session.count'] do
+      post login_url, headers: {'User-Agent': USER_AGENT}, params: {email: 'sterling@isiservice.com', password: 'secret'}
+    end
 
     assert_response :created
     assert cookies[JWTSessions.access_cookie].present?

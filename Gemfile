@@ -52,6 +52,9 @@ gem 'aws-sdk', '~> 3.0'
 # Use postgres database
 gem 'pg', '~> 1.1'
 
+# browser helps collect information about browser requests
+gem 'browser'
+
 # Sidekiq jobs
 gem 'sidekiq', '~> 5.2'
 
