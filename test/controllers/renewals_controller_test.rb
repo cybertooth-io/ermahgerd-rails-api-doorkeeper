@@ -24,6 +24,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
 
     post renew_url, headers: @headers
 
+    # TODO: sometimes this assertion fails; if you re-run the test it might work.  Timecop must be fucked?
     assert_response :unauthorized
     assert_equal 'Malicious activity detected', JSON.parse(response.body)['errors'].first['detail']
   end
