@@ -1,0 +1,24 @@
+# Defaults: https://github.com/rubocop-hq/rubocop/blob/master/config/default.yml
+# Configuration: https://docs.rubocop.org/en/latest/
+
+AllCops:
+  Exclude:
+    - db/**/*
+    - bin/{rails,rake,setup,update}
+
+# I want to enable this, but I'm just not sure I can consistently write code that yields a score less than 15
+# @see https://docs.rubocop.org/en/latest/cops_metrics/#metricsabcsize
+# @see http://c2.com/cgi/wiki?AbcMetric
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/LineLength:
+  Exclude:
+    - test/**/*
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 30
+
+Style/ClassAndModuleChildren:
+  AutoCorrect: true

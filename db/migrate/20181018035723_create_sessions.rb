@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateSessions < ActiveRecord::Migration[5.2]
   def change
     create_table :sessions do |t|
@@ -6,7 +8,7 @@ class CreateSessions < ActiveRecord::Migration[5.2]
       t.string :device, null: false
       t.datetime :expiring_at, null: false
       t.boolean :invalidated, default: false, null: false
-      t.references :invalidated_by, foreign_key: {to_table: :users}, index: true, null: true
+      t.references :invalidated_by, foreign_key: { to_table: :users }, index: true, null: true
       t.inet :ip_address, null: false
       t.string :platform, null: false
       t.string :platform_version, null: false
