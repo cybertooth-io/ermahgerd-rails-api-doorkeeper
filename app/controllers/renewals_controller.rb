@@ -1,4 +1,4 @@
-class RefreshController < ApplicationController
+class RenewalsController < ApplicationController
   # first authorize the request (CSRF etc.)
   before_action :authorize_refresh_by_access_request!
   # second authorize that the refresh token has not expired

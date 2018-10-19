@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class RefreshControllerTest < ActionDispatch::IntegrationTest
+class RenewalsControllerTest < ActionDispatch::IntegrationTest
   test 'when attempting to renew access token without an access cookie' do
     post renew_url
 
@@ -24,6 +24,7 @@ class RefreshControllerTest < ActionDispatch::IntegrationTest
 
     post renew_url, headers: @headers
 
+    # TODO: sometimes this assertion fails; if you re-run the test it might work.  Timecop must be fucked?
     assert_response :unauthorized
     assert_equal 'Malicious activity detected', JSON.parse(response.body)['errors'].first['detail']
   end
@@ -58,14 +59,14 @@ class RefreshControllerTest < ActionDispatch::IntegrationTest
 
     # attempt to delete user with old CSRF token (@headers has not been updated since call to `login(...)`)
     assert_no_difference ['User.count'] do
-      delete v1_user_url(users(:mallory_archer).id), headers: @headers
+      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: @headers
     end
 
     assert_response :unauthorized, 'CSRF token mismatch should have been detected'
 
     # now attempt to delete with the newly issued CSRF
     assert_difference ['User.count'], -1 do
-      delete v1_user_url(users(:mallory_archer).id), headers: new_headers
+      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: new_headers
     end
 
     assert_response :no_content, 'Re-issued CSRF token was used, delete should complete successfully'

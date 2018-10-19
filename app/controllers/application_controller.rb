@@ -15,30 +15,30 @@ class ApplicationController < ActionController::API
   # JSONAPI friendly unauthorized (401) handler
   def not_authorized(exception)
     render json: {
-      errors: [{
-        code: :unauthorized,
-        detail: exception.to_s,
-        sources: {
-          pointer: '/data'
-        },
-        status: :unauthorized,
-        title: 'Not Authorized',
-      }]
+        errors: [{
+                     code: :unauthorized,
+                     detail: exception.to_s,
+                     sources: {
+                         pointer: '/data'
+                     },
+                     status: :unauthorized,
+                     title: 'Not Authorized',
+                 }]
     }, status: :unauthorized
   end
 
   # JSONAPI friendly not found (404) handler
   def not_found(exception)
     render json: {
-      errors: [{
-        code: JSONAPI::RECORD_NOT_FOUND,
-        detail: exception.to_s,
-        sources: {
-          pointer: '/data'
-        },
-        status: JSONAPI::RECORD_NOT_FOUND,
-        title: 'Not Found',
-      }]
+        errors: [{
+                     code: JSONAPI::RECORD_NOT_FOUND,
+                     detail: exception.to_s,
+                     sources: {
+                         pointer: '/data'
+                     },
+                     status: JSONAPI::RECORD_NOT_FOUND,
+                     title: 'Not Found',
+                 }]
     }, status: :not_found
   end
 end

@@ -1,15 +1,17 @@
-class User < ApplicationRecord
+class Api::V1::Protected::UserResource < JSONAPI::Resource
 
-  has_secure_password
-
-
-  # Validations
+  # Attributes
   # --------------------------------------------------------------------------------------------------------------------
 
-  validates :email, :first_name, :last_name, presence: true
-
-  validates :email, format: {with: URI::MailTo::EMAIL_REGEXP}
-
+  attributes(
+      :created_at,
+      :email,
+      :first_name,
+      :last_name,
+      :nickname,
+      :updated_at,
+      {}
+  )
 
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
