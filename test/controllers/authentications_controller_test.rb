@@ -76,5 +76,6 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :no_content
     assert sterling.sessions.first.invalidated?
+    assert sterling.sessions.first.invalidated_by.present?
   end
 end
