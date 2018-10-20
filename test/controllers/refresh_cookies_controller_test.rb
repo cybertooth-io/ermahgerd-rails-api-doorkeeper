@@ -2,9 +2,9 @@
 
 require 'test_helper'
 
-class RenewalsControllerTest < ActionDispatch::IntegrationTest
+class RefreshCookiesControllerTest < ActionDispatch::IntegrationTest
   test 'when attempting to renew access token without an access cookie' do
-    post renew_url
+    post cookie_refresh_url
 
     assert_response :unauthorized
   end
@@ -12,7 +12,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
   test 'when attempting to renew access token but without supplying the csrf token' do
     login(users(:sterling_archer))
 
-    post renew_url
+    post cookie_refresh_url
 
     assert_response :unauthorized
   end
@@ -24,7 +24,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel((JWTSessions.access_exp_time - 1).seconds.from_now)
 
-    post renew_url, headers: @headers
+    post cookie_refresh_url, headers: @headers
 
     # TODO: sometimes this assertion fails; if you re-run the test it might work.  Timecop must be fucked?
     assert_response :unauthorized
@@ -38,7 +38,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
 
-    post renew_url, headers: @headers
+    post cookie_refresh_url, headers: @headers
 
     assert_response :created
   end
@@ -50,7 +50,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
 
-    post renew_url, headers: @headers
+    post cookie_refresh_url, headers: @headers
 
     assert_response :created
 
@@ -74,26 +74,26 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
     assert_response :no_content, 'Re-issued CSRF token was used, delete should complete successfully'
   end
 
-  test 'when token refresh succeeds one second BEFORE REFRESH expiry' do
+  test 'when refresh of access token succeeds one second BEFORE REFRESH expiry' do
     Timecop.freeze
 
     login(users(:sterling_archer))
 
     Timecop.travel((JWTSessions.refresh_exp_time - 1).seconds.from_now)
 
-    post renew_url, headers: @headers
+    post cookie_refresh_url, headers: @headers
 
     assert_response :created
   end
 
-  test 'when token refresh fails one second AFTER REFRESH expiry' do
+  test 'when refresh of access token fails one second AFTER REFRESH expiry' do
     Timecop.freeze
 
     login(users(:sterling_archer))
 
     Timecop.travel((JWTSessions.refresh_exp_time + 1).seconds.from_now)
 
-    post renew_url, headers: @headers
+    post cookie_refresh_url, headers: @headers
 
     assert_response :unauthorized
     assert_equal 'Session has expired', JSON.parse(response.body)['errors'].first['detail']

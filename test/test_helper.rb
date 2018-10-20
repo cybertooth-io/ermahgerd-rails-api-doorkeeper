@@ -20,20 +20,36 @@ module ActiveSupport
       Timecop.return
     end
 
-    # Helper to log a given user in
+    # Helper to log a given user in with cookie based authentication
     # @return headers with the `X-CSRF-Token` assigned; you must pass this to your HTTP actions (e.g. `get v1_users_url, headers: @headers`)
     def login(user, options = {})
       password = options[:password] || 'secret' # default 'secret'
 
       Rails.logger.info '------------------------------------------------------------------------------------------'
-      Rails.logger.info "Logging in as #{user.email}"
+      Rails.logger.info "Cookie Authentication as #{user.email}"
       Rails.logger.info '------------------------------------------------------------------------------------------'
 
-      post login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: user.email, password: password }
+      post cookie_login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: user.email, password: password }
 
       @csrf_token = ::JSON.parse(response.body)['csrf']
       @headers = {}
       @headers[JWTSessions.csrf_header] = @csrf_token
+    end
+
+    # Helper to log a given user in with cookie based authentication
+    # @return headers with the `X-CSRF-Token` assigned; you must pass this to your HTTP actions (e.g. `get v1_users_url, headers: @headers`)
+    def token(user, options = {})
+      password = options[:password] || 'secret' # default 'secret'
+
+      Rails.logger.info '------------------------------------------------------------------------------------------'
+      Rails.logger.info "Token Authentication as #{user.email}"
+      Rails.logger.info '------------------------------------------------------------------------------------------'
+
+      post token_login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: user.email, password: password }
+
+      @access_token = ::JSON.parse(response.body)['access']
+      @headers = {}
+      @headers[JWTSessions.access_header] = @access_token
     end
   end
 end
