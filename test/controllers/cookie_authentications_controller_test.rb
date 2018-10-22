@@ -2,10 +2,10 @@
 
 require 'test_helper'
 
-class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
+class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
   test 'when logging in fails because the email is missing' do
     assert_no_difference ['Session.count'] do
-      post login_url
+      post cookie_login_url
     end
 
     assert_response :not_found
@@ -14,7 +14,7 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'when logging in fails because the password is missing' do
     assert_no_difference ['Session.count'] do
-      post login_url, params: { email: 'sterling@isiservice.com' }
+      post cookie_login_url, params: { email: 'sterling@isiservice.com' }
     end
 
     assert_response :unauthorized
@@ -23,16 +23,16 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
   test 'when logging in fails because the email and password do not match' do
     assert_no_difference ['Session.count'] do
-      post login_url, params: { email: 'sterling@isiservice.com', password: 'secrets' }
+      post cookie_login_url, params: { email: 'sterling@isiservice.com', password: 'secrets' }
     end
 
     assert_response :unauthorized
     refute cookies[JWTSessions.access_cookie].present?
   end
 
-  test 'when logging is successful' do
+  test 'when logging in is successful' do
     assert_difference ['Session.count'] do
-      post login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: 'sterling@isiservice.com', password: 'secret' }
+      post cookie_login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: 'sterling@isiservice.com', password: 'secret' }
     end
 
     assert_response :created
@@ -40,7 +40,7 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
   end
 
   test 'when logging out without a session' do
-    delete logout_url
+    delete cookie_logout_url
 
     assert_response :unauthorized
     assert_equal 'Token is not found', JSON.parse(response.body)['errors'].first['detail']
@@ -55,7 +55,7 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     assert cookies[JWTSessions.access_cookie].present?
 
-    delete logout_url, headers: @headers
+    delete cookie_logout_url, headers: @headers
 
     assert_response :no_content
     refute cookies[JWTSessions.access_cookie].present?
@@ -72,7 +72,7 @@ class AuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     refute sterling.sessions.first.invalidated?
 
-    delete logout_url, headers: @headers
+    delete cookie_logout_url, headers: @headers
 
     assert_response :no_content
     assert sterling.sessions.first.invalidated?

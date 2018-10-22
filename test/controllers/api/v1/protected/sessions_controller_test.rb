@@ -39,6 +39,34 @@ module Api
 
           assert_response :unauthorized
         end
+
+        test 'when session is invalidated the access token is immediately unusable' do
+          Timecop.freeze
+
+          mallory_archer = users(:mallory_archer)
+          token(mallory_archer) # logging in mallory so we can invalidate her!
+          mallory_archer_headers = @headers
+          mallory_archer_session = mallory_archer.sessions.first
+
+          Timecop.travel 5.minutes.from_now
+
+          login(users(:sterling_archer))
+
+          # confirm Mallory Archer's session can right now access protected resources
+          get api_v1_protected_users_url, headers: mallory_archer_headers
+
+          assert_response :ok
+
+          # now using Sterling's account, invalidate Mallory's session
+          patch invalidate_api_v1_protected_session_url(mallory_archer_session.id), headers: @headers
+
+          assert_response :no_content
+
+          # now see if Mallory can still use her access token
+          get api_v1_protected_users_url, headers: mallory_archer_headers
+
+          assert_response :unauthorized
+        end
       end
     end
   end

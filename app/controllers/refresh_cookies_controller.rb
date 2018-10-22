@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
-# This controller is responsible for refreshing access tokens that have expired.
+# This controller is responsible for refreshing access tokens that have expired and that are stored securely
+# as http cookies.
 #
 # JWTSessions does not appear to respect RefreshToken expiry in its workflow, so it is up to this
 # implementation to `:authorize_refresh_not_expired!`.  Should a refresh token hit its expiry, we
@@ -9,7 +10,7 @@
 # Otherwise, we will attempt to refresh the access token so that it can continue accessing resources.  Attempts
 # to refresh an access token prior to its expiry will be flush the session and produce a 401 UNAUTHORIZED response
 # that will describe the refresh attempt as 'Malicious activity detected'.
-class RenewalsController < ApplicationController
+class RefreshCookiesController < ApplicationController
   # first authorize the request (CSRF etc.)
   before_action :authorize_refresh_by_access_request!
   # second authorize that the refresh token has not expired
@@ -35,6 +36,7 @@ class RenewalsController < ApplicationController
       JWTSessions.access_cookie,
       value: tokens[:access],
       httponly: true,
+      path: '/',
       secure: Rails.env.production?
     )
 
