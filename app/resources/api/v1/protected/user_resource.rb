@@ -1,20 +1,29 @@
-class Api::V1::Protected::UserResource < JSONAPI::Resource
+# frozen_string_literal: true
 
-  # Attributes
-  # --------------------------------------------------------------------------------------------------------------------
+module Api
+  module V1
+    module Protected
+      # Protected access to the `User` model.
+      # It should go without saying that the password_digest is never passed through the wire.
+      class UserResource < JSONAPI::Resource
+        # Attributes
+        # --------------------------------------------------------------------------------------------------------------
 
-  attributes(
-      :created_at,
-      :email,
-      :first_name,
-      :last_name,
-      :nickname,
-      :updated_at,
-      {}
-  )
+        attributes(
+          :created_at,
+          :email,
+          :first_name,
+          :last_name,
+          :nickname,
+          :updated_at,
+          {}
+        )
 
-  # Relationships
-  # --------------------------------------------------------------------------------------------------------------------
+        # Relationships
+        # --------------------------------------------------------------------------------------------------------------
 
-  has_many :sessions
+        has_many :sessions
+      end
+    end
+  end
 end

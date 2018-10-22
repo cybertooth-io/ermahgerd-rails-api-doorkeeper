@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 Rails.application.routes.draw do
   post '/login', to: 'authentications#create'
   delete '/logout', to: 'authentications#destroy'
   post '/renew', to: 'renewals#create'
 
-  namespace :api, constraints: {format: :json} do
+  namespace :api, constraints: { format: :json } do
     namespace :v1 do
       namespace :protected do
         jsonapi_resources :sessions do

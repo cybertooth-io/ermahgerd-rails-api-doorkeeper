@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'test_helper'
 
 class RenewalsControllerTest < ActionDispatch::IntegrationTest
@@ -52,7 +54,7 @@ class RenewalsControllerTest < ActionDispatch::IntegrationTest
 
     assert_response :created
 
-    new_headers = Hash.new
+    new_headers = {}
     new_headers[JWTSessions.csrf_header] = JSON.parse(response.body)['csrf']
 
     Timecop.travel(5.minutes.from_now)
