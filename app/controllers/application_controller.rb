@@ -18,26 +18,29 @@ class ApplicationController < ActionController::API
 
   rescue_from JWTSessions::Errors::Unauthorized, with: :not_authorized
 
+  rescue_from Pundit::NotAuthorizedError, with: :forbidden
+
   private
 
-  # The current_user can be found in the JWT payload
+  # The current_user can be found in the JWT payload; eagerly load the user's roles so they can be discriminated
+  # against
   def current_user
-    @current_user ||= User.find(payload['user_id'])
+    @current_user ||= User.includes(:roles).find_by(id: payload['user_id'])
   end
 
-  # JSONAPI friendly unauthorized (401) handler
-  def not_authorized(exception)
+  # JSONAPI friendly not found (404) handler
+  def forbidden(exception)
     render json: {
       errors: [{
-        code: :unauthorized,
+        code: JSONAPI::FORBIDDEN,
         detail: exception.to_s,
         sources: {
           pointer: '/data'
         },
-        status: :unauthorized,
-        title: 'Not Authorized'
+        status: JSONAPI::FORBIDDEN,
+        title: 'Forbidden'
       }]
-    }, status: :unauthorized
+    }, status: :forbidden
   end
 
   # JSONAPI friendly not found (404) handler
@@ -53,5 +56,20 @@ class ApplicationController < ActionController::API
         title: 'Not Found'
       }]
     }, status: :not_found
+  end
+
+  # JSONAPI friendly unauthorized (401) handler
+  def not_authorized(exception)
+    render json: {
+      errors: [{
+        code: :unauthorized,
+        detail: exception.to_s,
+        sources: {
+          pointer: '/data'
+        },
+        status: :unauthorized,
+        title: 'Not Authorized'
+      }]
+    }, status: :unauthorized
   end
 end

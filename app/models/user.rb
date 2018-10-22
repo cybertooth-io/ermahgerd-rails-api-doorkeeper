@@ -16,5 +16,18 @@ class User < ApplicationRecord
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
 
+  has_and_belongs_to_many :roles
+
   has_many :sessions
+
+  # Pundit Helpers
+  # --------------------------------------------------------------------------------------------------------------------
+
+  def administrator?
+    roles.exists?(key: 'ADMIN')
+  end
+
+  def read_only?
+    roles.exists?(key: 'RO')
+  end
 end

@@ -5,7 +5,7 @@ module Api
     module Protected
       # Protected access to the `User` model.
       # It should go without saying that the password_digest is never passed through the wire.
-      class UserResource < JSONAPI::Resource
+      class UserResource < BaseResource
         # Attributes
         # --------------------------------------------------------------------------------------------------------------
 

@@ -9,26 +9,25 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
     assert_response :unauthorized
   end
 
-  test 'when renewing an access token one second before access-expiry' do
+  test 'when renewing an access token a few seconds before access-expiry' do
     Timecop.freeze
 
     token(users(:sterling_archer))
 
-    Timecop.travel((JWTSessions.access_exp_time - 1).seconds.from_now)
+    Timecop.travel((JWTSessions.access_exp_time - 3).seconds.from_now)
 
     post token_refresh_url, headers: @headers
 
-    # TODO: sometimes this assertion fails; if you re-run the test it might work.  Timecop must be fucked?
     assert_response :unauthorized
     assert_equal 'Malicious activity detected', JSON.parse(response.body)['errors'].first['detail']
   end
 
-  test 'when renewing an access token one second after access-expiry' do
+  test 'when renewing an access token a few seconds after access-expiry' do
     Timecop.freeze
 
     token(users(:sterling_archer))
 
-    Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
+    Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
 
     post token_refresh_url, headers: @headers
 
@@ -37,12 +36,12 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal @access_token, JSON.parse(response.body)['access']
   end
 
-  test 'when refresh of access token succeeds one second BEFORE REFRESH expiry' do
+  test 'when refresh of access token succeeds a few seconds BEFORE REFRESH expiry' do
     Timecop.freeze
 
     token(users(:sterling_archer))
 
-    Timecop.travel((JWTSessions.refresh_exp_time - 1).seconds.from_now)
+    Timecop.travel((JWTSessions.refresh_exp_time - 3).seconds.from_now)
 
     post token_refresh_url, headers: @headers
 
@@ -51,12 +50,12 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
     assert_not_equal @access_token, JSON.parse(response.body)['access']
   end
 
-  test 'when refresh of access token fails one second AFTER REFRESH expiry' do
+  test 'when refresh of access token fails a few seconds AFTER REFRESH expiry' do
     Timecop.freeze
 
     login(users(:sterling_archer))
 
-    Timecop.travel((JWTSessions.refresh_exp_time + 1).seconds.from_now)
+    Timecop.travel((JWTSessions.refresh_exp_time + 3).seconds.from_now)
 
     post token_refresh_url, headers: @headers
 
@@ -67,9 +66,9 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
   test 'when renewing an access token and performing a DELETE with the new token' do
     Timecop.freeze
 
-    token(users(:sterling_archer))
+    token(users(:some_administrator))
 
-    Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
+    Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
 
     # delete should fail because access token is expired
     assert_no_difference ['User.count'] do

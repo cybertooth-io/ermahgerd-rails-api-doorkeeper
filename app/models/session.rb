@@ -26,4 +26,9 @@ class Session < ApplicationRecord
   belongs_to :invalidated_by, class_name: 'User', optional: true
 
   belongs_to :user
+
+  # Scopes
+  # --------------------------------------------------------------------------------------------------------------------
+
+  scope :by_user, ->(ids) { where user_id: ids }
 end

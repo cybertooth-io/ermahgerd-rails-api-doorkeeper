@@ -10,7 +10,7 @@ module Api
           mallory_archer = users(:mallory_archer)
           login(mallory_archer) # logging in mallory so we can invalidate her!
 
-          login(users(:sterling_archer)) # now for this test session STOMP mallory's sign in (her session still exists!)
+          login(users(:some_administrator)) # user the administrator to invalidate Mallory's session
 
           session = mallory_archer.sessions.first
 
@@ -26,7 +26,8 @@ module Api
         test 'when destroying a session that has already been destroyed' do
           mallory_archer = users(:mallory_archer)
           login(mallory_archer) # logging in mallory so we can invalidate her!
-          login(users(:sterling_archer))
+
+          login(users(:some_administrator)) # user the administrator to invalidate Mallory's session
 
           session = mallory_archer.sessions.first
 
@@ -50,7 +51,7 @@ module Api
 
           Timecop.travel 5.minutes.from_now
 
-          login(users(:sterling_archer))
+          login(users(:some_administrator)) # user the administrator to invalidate Mallory's session
 
           # confirm Mallory Archer's session can right now access protected resources
           get api_v1_protected_users_url, headers: mallory_archer_headers

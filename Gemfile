@@ -35,7 +35,8 @@ gem 'health_check', '~> 3.0'
 gem 'seed-fu', '~> 2.3'
 
 # Authorization
-gem 'pundit', '~> 2.0'
+gem 'jsonapi-authorization', '~> 1.0.0.beta2'
+# gem 'pundit', '~> 2.0'
 
 gem 'jsonapi-resources', '~> 0.9'
 

@@ -75,6 +75,6 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     get api_v1_protected_users_url, headers: @headers
 
     assert_response :ok
-    assert_equal 2, JSON.parse(response.body)['data'].length
+    assert_equal 4, JSON.parse(response.body)['data'].length
   end
 end

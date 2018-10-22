@@ -5,7 +5,7 @@ module Api
     module Protected
       # Protected access to the `Session` model.
       # Note that the RUID is not ever exposed or sent to through the wire.
-      class SessionResource < JSONAPI::Resource
+      class SessionResource < BaseResource
         immutable # no CUD through controller
 
         # Attributes

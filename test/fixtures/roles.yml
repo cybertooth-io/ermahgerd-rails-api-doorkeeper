@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+administrator:
+  key: ADMIN
+  name: Administrator
+  notes: An administrator role that is likely granted permission to do anything.
+  users:
+
+read_only:
+  key: RO
+  name: Read-Only
+  notes: A read-only role that cannot make any calls to destructive actions.
+  users: [mallory_archer]
