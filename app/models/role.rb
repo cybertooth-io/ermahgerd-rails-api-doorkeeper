@@ -11,7 +11,7 @@ class Role < ApplicationRecord
 
   validates :key, :name, presence: true
 
-  validates :key, uniqueness: true
+  validates :key, uniqueness: { case_sensitive: false }
 
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
