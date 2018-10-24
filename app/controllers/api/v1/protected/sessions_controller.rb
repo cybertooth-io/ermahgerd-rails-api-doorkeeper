@@ -20,11 +20,15 @@ module Api
 
           # TODO: the following flush will throw an JWTSessions::Errors::Unauthorized exception if the refresh token
           # cannot be found; what should we do?
-          jwt_session.flush_by_uid(session.ruid)
+          begin
+            jwt_session.flush_by_uid(session.ruid)
 
-          session.update!(invalidated: true, invalidated_by: current_user)
+            session.update!(invalidated: true, invalidated_by: current_user)
 
-          render json: { data: {}, meta: {} }, status: :no_content
+            render json: { data: {}, meta: {} }, status: :no_content
+          rescue JWTSessions::Errors::Unauthorized => exception
+            not_found exception
+          end
         end
       end
     end

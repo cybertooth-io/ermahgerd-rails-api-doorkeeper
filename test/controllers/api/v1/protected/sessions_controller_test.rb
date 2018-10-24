@@ -38,7 +38,8 @@ module Api
           # now try to invalidate again! Using PUT this time for spice of life
           put invalidate_api_v1_protected_session_url(session.id), headers: @headers
 
-          assert_response :unauthorized
+          assert_response :not_found
+          assert_equal 'Refresh token not found', JSON.parse(response.body)['errors'].first['detail']
         end
 
         test 'when session is invalidated the access token is immediately unusable' do

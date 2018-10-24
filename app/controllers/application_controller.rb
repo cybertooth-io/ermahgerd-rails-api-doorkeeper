@@ -54,7 +54,7 @@ class ApplicationController < ActionController::API
         code: JSONAPI::RECORD_NOT_FOUND,
         detail: exception.to_s,
         sources: {
-          pointer: '/data'
+          pointer: '/data/base'
         },
         status: JSONAPI::RECORD_NOT_FOUND,
         title: 'Not Found'
