@@ -10,6 +10,7 @@ module Api
         include Pundit
         # :authorize_access_request! is part of JWTSessions and is all about ensuring valid `authenticated` requests
         before_action :authorize_access_request!
+        before_action :record_session_activity
 
         private
 
@@ -18,6 +19,24 @@ module Api
         # controller actions.
         def context
           { current_user: current_user }
+        end
+
+        def record_session_activity
+          return unless Rails.configuration.record_session_activity
+
+          ruid = payload['ruid']
+          session = Session.find_by!(ruid: ruid)
+
+          if session.present?
+            return RecordSessionActivityWorker.perform_async(
+              Time.now.iso8601,
+              request.remote_ip,
+              request.path,
+              session.id
+            )
+          end
+
+          Rails.logger.warn("Session with ruid of #{ruid} cannot be found.")
         end
       end
     end

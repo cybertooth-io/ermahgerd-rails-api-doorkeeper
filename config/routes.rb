@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  # Sidekiq Console
+  # RTFM: https://github.com/mperham/sidekiq/wiki/Monitoring#rails
+  # require 'sidekiq/web'
+  # mount Sidekiq::Web => '/sidekiq'
+
   post '/cookie/login', to: 'cookie_authentications#create'
   delete '/cookie/logout', to: 'cookie_authentications#destroy'
   post '/cookie/refresh', to: 'refresh_cookies#create'
@@ -12,6 +17,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       namespace :protected do
         jsonapi_resources :roles
+        jsonapi_resources :session_activities
         jsonapi_resources :sessions do
           member do
             patch :invalidate

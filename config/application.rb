@@ -35,5 +35,8 @@ module CppdistComRails
     # Middleware like session, flash, cookies can be added back manually.
     # Skip views, helpers and assets when generating a new resource.
     config.api_only = true
+
+    # Whether or not to record `SessionActivity` in the `BaseResourceController`
+    config.record_session_activity = ENV.fetch('RECORD_SESSION_ACTIVITY') { true }
   end
 end

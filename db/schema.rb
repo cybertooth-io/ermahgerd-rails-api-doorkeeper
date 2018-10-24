@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_20_064231) do
+ActiveRecord::Schema.define(version: 2018_10_24_050635) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,14 @@ ActiveRecord::Schema.define(version: 2018_10_20_064231) do
     t.bigint "user_id", null: false
     t.index ["role_id"], name: "index_roles_users_on_role_id"
     t.index ["user_id"], name: "index_roles_users_on_user_id"
+  end
+
+  create_table "session_activities", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.inet "ip_address", null: false
+    t.string "path", null: false
+    t.bigint "session_id", null: false
+    t.index ["session_id"], name: "index_session_activities_on_session_id"
   end
 
   create_table "sessions", force: :cascade do |t|
@@ -63,6 +71,7 @@ ActiveRecord::Schema.define(version: 2018_10_20_064231) do
 
   add_foreign_key "roles_users", "roles"
   add_foreign_key "roles_users", "users"
+  add_foreign_key "session_activities", "sessions"
   add_foreign_key "sessions", "users"
   add_foreign_key "sessions", "users", column: "invalidated_by_id"
 end

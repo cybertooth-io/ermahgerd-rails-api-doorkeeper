@@ -56,6 +56,13 @@ en:
         ruid: Refresh Token Identifier
         user: Belonging To
 
+      session_activity:
+        created_at: Created On
+        updated_at: Updated On
+        ip_address: Source IP Address
+        path: Resource Path
+        session: Session
+
       user:
         created_at: Created On
         updated_at: Updated On

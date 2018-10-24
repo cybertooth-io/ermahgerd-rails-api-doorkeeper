@@ -75,6 +75,16 @@ module Api
 
           assert_response :no_content
         end
+
+        test 'when index by authenticated administrator the session activity is recorded' do
+          login(users(:some_administrator))
+
+          assert_difference ['RecordSessionActivityWorker.jobs.size'] do
+            get api_v1_protected_users_url, headers: @headers
+          end
+
+          assert_response :ok
+        end
       end
     end
   end

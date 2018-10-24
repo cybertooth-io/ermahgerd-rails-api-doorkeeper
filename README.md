@@ -33,9 +33,17 @@ Seed the database with:
 $ rake db:seed_fu
 ```
 
+### Redis
+
+Redis is used by JWTSessions to store Tokens and is also used by Sidekiq to queue up jobs.
+
+JWTSessions is configured in `config/initializers/jwt_session.rb` to use database `0`.
+
+Sidekiq is configured in `config/initializers/sidekiq.rb` to use database `1`.
+
 ### Crons/Jobs/Queues
 
-_Coming soon_
+If you're creating Sidekiq jobs please use the generator: `rails g sidekiq:worker record_session_activity`
 
 ### Development Workflow
 
@@ -62,6 +70,13 @@ _Coming soon_
     1. Make sure the controller extends `BaseResourceController`
     1. Add the controller's end points to the `config/routes.rb` file; use `jsonapi_resources` helper :-)
     1. Unit test accordingly (e.g. confirm returned payload only contains the fields specified in the resource)
+
+----
+
+## Configuration Notes
+
+The `config/application.rb` sets the `record_session_activity` boolean which is used to determine whether
+we should be logging session activity.
 
 ----
 

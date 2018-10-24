@@ -1,0 +1,21 @@
+---
+
+# RTFM: https://github.com/mperham/sidekiq/wiki/Advanced-Options
+
+:verbose: false
+#:pidfile: ./tmp/pids/sidekiq.pid
+:concurrency: 5
+# Set timeout to 8 on Heroku, longer if you manage your own systems.
+:timeout: 30
+development:
+  :verbose: true
+test:
+  :verbose: true
+staging:
+  :pidfile: '/var/app/support/pids/sidekiq.pid'
+  :logfile: '/var/app/support/logs/sidekiq.log'
+  :concurrency: 25
+production:
+  :pidfile: '/var/app/support/pids/sidekiq.pid'
+  :logfile: '/var/app/support/logs/sidekiq.log'
+  :concurrency: 25
