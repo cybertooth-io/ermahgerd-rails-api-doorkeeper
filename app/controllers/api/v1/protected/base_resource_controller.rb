@@ -8,8 +8,11 @@ module Api
       class BaseResourceController < ApplicationController
         include JSONAPI::ActsAsResourceController
         include Pundit
+
         # :authorize_access_request! is part of JWTSessions and is all about ensuring valid `authenticated` requests
         before_action :authorize_access_request!
+
+        # got this far, let's record this request in the `SessionActivity` table
         before_action :record_session_activity
 
         private
@@ -21,6 +24,7 @@ module Api
           { current_user: current_user }
         end
 
+        # Using the setting in `config/application.rb` determine whether or not to record session activity
         def record_session_activity
           return unless Rails.configuration.record_session_activity
 
