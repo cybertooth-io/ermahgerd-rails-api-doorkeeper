@@ -24,6 +24,16 @@ module Api
           {}
         )
 
+        # http://jsonapi-resources.com/v0.9/guide/resources.html#Creatable-and-Updatable-Attributes
+        def self.updatable_fields(_context)
+          [] # immutable
+        end
+
+        # http://jsonapi-resources.com/v0.9/guide/resources.html#Creatable-and-Updatable-Attributes
+        def self.creatable_fields(_context)
+          [] # immutable
+        end
+
         # Relationships
         # --------------------------------------------------------------------------------------------------------------
 

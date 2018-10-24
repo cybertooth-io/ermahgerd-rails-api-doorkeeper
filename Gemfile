@@ -36,7 +36,6 @@ gem 'seed-fu', '~> 2.3'
 
 # Authorization
 gem 'jsonapi-authorization', '~> 1.0.0.beta2'
-# gem 'pundit', '~> 2.0'
 
 gem 'jsonapi-resources', '~> 0.9'
 

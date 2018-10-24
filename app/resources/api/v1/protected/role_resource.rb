@@ -4,7 +4,7 @@ module Api
   module V1
     module Protected
       # Protected access to the `Role` model.
-      class RoleResource < JSONAPI::Resource
+      class RoleResource < BaseResource
         # Attributes
         # --------------------------------------------------------------------------------------------------------------
 

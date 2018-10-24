@@ -64,6 +64,8 @@ en:
         last_name: Last Name
         nickname: Nickname
         password_digest: Encrypted Password
+        roles: Roles
+        sessions: Sessions
 
     # table/model pluralization should be defined here
     models:
