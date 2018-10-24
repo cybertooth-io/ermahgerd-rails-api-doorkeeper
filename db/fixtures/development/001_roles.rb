@@ -3,11 +3,11 @@ Role.seed_once(
         {
             key: 'ADMIN',
             name: 'Administrator',
-            notes: 'An administrator role that is likely granted permission to do anything.'
+            notes: 'An administrator role that will have permission to create, update, and delete almost everything.'
         },
         {
-            key: 'RO',
-            name: 'Read-Only',
-            notes: 'A read-only role that cannot make any calls to destructive actions.'
+            key: 'GUEST',
+            name: 'Guest',
+            notes: 'An authenticated guest role.  Permissions vary.'
         }
 )

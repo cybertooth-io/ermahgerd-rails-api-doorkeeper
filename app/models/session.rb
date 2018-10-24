@@ -20,6 +20,12 @@ class Session < ApplicationRecord
     presence: true
   )
 
+  # boolean presence check...crazy I know (http://stackoverflow.com/a/4721574/545137)
+  validates :invalidated, inclusion: { in: [true, false] }
+
+  # TODO: validate that you can only invalidate sessions that aren't already invalidated
+  # TODO: validate that :update includes the `invalidated_by` field
+
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
 

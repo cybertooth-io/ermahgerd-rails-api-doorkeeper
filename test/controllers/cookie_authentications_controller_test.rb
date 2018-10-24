@@ -49,7 +49,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
   test 'when logging out successfully the cookie is destroyed' do
     Timecop.freeze
 
-    login(users(:sterling_archer))
+    login(users(:mallory_archer))
 
     Timecop.travel 15.minutes.from_now
 
@@ -64,18 +64,18 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
   test 'when logging out successfully the Session invalidated fields are updated' do
     Timecop.freeze
 
-    sterling = users(:sterling_archer)
+    mallory_archer = users(:mallory_archer)
 
-    login(sterling)
+    login(mallory_archer)
 
     Timecop.travel 15.minutes.from_now
 
-    refute sterling.sessions.first.invalidated?
+    refute mallory_archer.sessions.first.invalidated?
 
     delete cookie_logout_url, headers: @headers
 
     assert_response :no_content
-    assert sterling.sessions.first.invalidated?
-    assert sterling.sessions.first.invalidated_by.present?
+    assert mallory_archer.sessions.first.invalidated?
+    assert mallory_archer.sessions.first.invalidated_by.present?
   end
 end

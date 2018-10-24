@@ -3,11 +3,11 @@
 administrator:
   key: ADMIN
   name: Administrator
-  notes: An administrator role that is likely granted permission to do anything.
-  users:
+  notes: An administrator role that will have permission to create, update, and delete almost everything.
+  users: [some_administrator]
 
-read_only:
-  key: RO
-  name: Read-Only
-  notes: A read-only role that cannot make any calls to destructive actions.
-  users: [mallory_archer]
+guest:
+  key: GUEST
+  name: Guest
+  notes: An authenticated guest role.
+  users: [mallory_archer, sterling_archer, some_guest]

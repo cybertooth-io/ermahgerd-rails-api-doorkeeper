@@ -13,31 +13,31 @@ module Api
         end
 
         test 'when logging in to get authorized access to the index action' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           get api_v1_protected_users_url
 
           assert_response :ok
-          assert_equal 4, ::JSON.parse(response.body)['data'].length
+          assert_equal 5, ::JSON.parse(response.body)['data'].length
         end
 
         test 'when accessing resource a few seconds before access token expires' do
           Timecop.freeze
 
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           Timecop.travel((JWTSessions.access_exp_time - 3).seconds.from_now)
 
           get api_v1_protected_users_url
 
           assert_response :ok
-          assert_equal 4, ::JSON.parse(response.body)['data'].length
+          assert_equal 5, ::JSON.parse(response.body)['data'].length
         end
 
         test 'when accessing resource a few seconds after access token expires' do
           Timecop.freeze
 
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
 
@@ -48,7 +48,7 @@ module Api
         end
 
         test 'when show' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           get api_v1_protected_user_url(users(:mallory_archer))
 
@@ -57,7 +57,7 @@ module Api
         end
 
         test 'when destroy without specifying a CSRF token in the header' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           assert_no_difference ['User.count'] do
             delete api_v1_protected_user_url(users(:mallory_archer))

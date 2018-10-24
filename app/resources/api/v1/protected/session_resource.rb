@@ -15,14 +15,12 @@ module Api
         attributes(
           :browser,
           :browser_version,
-          :created_at,
           :device,
           :expiring_at,
           :invalidated,
           :ip_address,
           :platform,
           :platform_version,
-          :updated_at,
           {}
         )
 

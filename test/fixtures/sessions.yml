@@ -1,0 +1,12 @@
+sterling_archer_session:
+  browser: Internet Exploder
+  browser_version: 6
+  device: 'Unknown'
+  expiring_at: <%= JWTSessions.refresh_exp_time.seconds.from_now %>
+  invalidated: false
+  invalidated_by:
+  ip_address: 1.2.3.4
+  platform: 'Windows XP'
+  platform_version: '5.1.2600'
+  ruid: 'SOME-RUID-NUMBER'
+  user: sterling_archer

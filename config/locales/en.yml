@@ -30,4 +30,59 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
+  activerecord:
+    # table column labels should be defined here
+    attributes:
+      role:
+        created_at: Created On
+        updated_at: Updated On
+        key: Login From Browser
+        name: Browser Version
+        notes: Login Device Name
+        users: Assigned To
+
+      session:
+        created_at: Created On
+        updated_at: Updated On
+        browser: Login From Browser
+        browser_version: Browser Version
+        device: Login Device Name
+        expiring_at: Expires On
+        invalidated: Invalidated?
+        invalidated_by: Invalidated By
+        ip_address: Login IP Address
+        platform: Login From Platform
+        platform_version: Platform Version
+        ruid: Refresh Token Identifier
+        user: Belonging To
+
+      user:
+        created_at: Created On
+        updated_at: Updated On
+        email: Email Address
+        first_name: First Name
+        last_name: Last Name
+        nickname: Nickname
+        password_digest: Encrypted Password
+
+    # table/model pluralization should be defined here
+    models:
+      role:
+        one: Role
+        other: Roles
+
+      session:
+        one: Session
+        other: Sessions
+
+      user:
+        one: User
+        other: Users
+
+  pundit:
+    default: You are forbidden from performing this action
+
+    # the ApplicationController will use these messages in generating the Forbidden payload
+    # see https://github.com/varvet/pundit#creating-custom-error-messages
+    session_policy:
+      invalidate?: You are not permitted to invalidate this session

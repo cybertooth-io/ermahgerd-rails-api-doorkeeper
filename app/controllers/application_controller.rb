@@ -30,12 +30,16 @@ class ApplicationController < ActionController::API
 
   # JSONAPI friendly not found (404) handler
   def forbidden(exception)
+    # can improve these messages by simply adding to the translations bundle
+    # see https://github.com/varvet/pundit#creating-custom-error-messages
     render json: {
       errors: [{
         code: JSONAPI::FORBIDDEN,
-        detail: exception.to_s,
+        detail: I18n.t(
+          "#{exception.policy.class.to_s.underscore}.#{exception.query}", scope: 'pundit', default: :default
+        ),
         sources: {
-          pointer: '/data'
+          pointer: '/data/forbidden'
         },
         status: JSONAPI::FORBIDDEN,
         title: 'Forbidden'
@@ -65,7 +69,7 @@ class ApplicationController < ActionController::API
         code: :unauthorized,
         detail: exception.to_s,
         sources: {
-          pointer: '/data'
+          pointer: '/data/unauthorized'
         },
         status: :unauthorized,
         title: 'Not Authorized'

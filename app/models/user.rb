@@ -20,6 +20,11 @@ class User < ApplicationRecord
 
   has_many :sessions
 
+  # Scopes
+  # --------------------------------------------------------------------------------------------------------------------
+
+  scope :by_id, ->(ids) { where id: ids }
+
   # Pundit Helpers
   # --------------------------------------------------------------------------------------------------------------------
 
@@ -27,7 +32,7 @@ class User < ApplicationRecord
     roles.exists?(key: 'ADMIN')
   end
 
-  def read_only?
-    roles.exists?(key: 'RO')
+  def guest?
+    roles.exists?(key: 'GUEST')
   end
 end

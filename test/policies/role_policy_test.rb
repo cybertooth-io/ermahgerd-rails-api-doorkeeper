@@ -3,13 +3,28 @@
 require 'test_helper'
 
 class RolePolicyTest < ActiveSupport::TestCase
-  def test_scope; end
+  test 'when create' do
+    assert RolePolicy.new(users(:some_administrator), Role).create?
+    refute RolePolicy.new(users(:some_guest), Role).create?
+  end
 
-  def test_show; end
+  test 'when destroy' do
+    assert RolePolicy.new(users(:some_administrator), roles(:administrator)).destroy?
+    refute RolePolicy.new(users(:some_guest), roles(:administrator)).destroy?
+  end
 
-  def test_create; end
+  test 'when index' do
+    assert RolePolicy.new(users(:some_administrator), Role).index?
+    refute RolePolicy.new(users(:some_guest), Role).index?
+  end
 
-  def test_update; end
+  test 'when show' do
+    assert RolePolicy.new(users(:some_administrator), roles(:administrator)).show?
+    refute RolePolicy.new(users(:some_guest), roles(:administrator)).show?
+  end
 
-  def test_destroy; end
+  test 'when update' do
+    assert RolePolicy.new(users(:some_administrator), roles(:administrator)).update?
+    refute RolePolicy.new(users(:some_guest), roles(:administrator)).update?
+  end
 end

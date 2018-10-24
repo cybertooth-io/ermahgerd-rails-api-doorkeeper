@@ -1,27 +1,37 @@
 # frozen_string_literal: true
 
 # The Pundit policy for all JSONAPI actions.
+# Unless otherwise overridden, access is to create, destroy, index, show, update is denied.
 class UserPolicy < ApplicationPolicy
   def create?
     user.administrator?
   end
 
   def destroy?
-    user.administrator?
+    create?
   end
 
   def index?
-    true
+    create?
   end
 
+  # can show/see your own user record; or if you're administrator can show/see everyone's user record
   def show?
-    true
+    user.id == record.id || user.administrator?
   end
 
-  # This Policy's scope; defaults to everything (scope.all).
+  # can update your own user record; or if you're administrator can update everyone's user record
+  def update?
+    show?
+  end
+
+  # Administrator's have access to ALL user records.
+  # Everyone else can only see their own user record.
   class Scope < Scope
     def resolve
-      scope.all
+      return scope.all if user.administrator?
+
+      scope.by_id user.id
     end
   end
 end
