@@ -4,10 +4,10 @@ administrator:
   key: ADMIN
   name: Administrator
   notes: An administrator role that will have permission to create, update, and delete almost everything.
-  users: [some_administrator]
+  users: # specified in users.yml
 
 guest:
   key: GUEST
   name: Guest
   notes: An authenticated guest role.
-  users: [mallory_archer, sterling_archer, some_guest]
+  users: # specified in users.yml

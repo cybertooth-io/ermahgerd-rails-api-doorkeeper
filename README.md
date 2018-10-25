@@ -4,7 +4,8 @@
 
 You need the following:
 
-* Ruby-2.3+ (suggest Ruby-2.5 but check your production environment to be sure -- e.g. AWS EB)
+* Ruby-2.3+ - suggest Ruby-2.5 but check your production environment to be sure -- e.g. AWS EB
+* Docker - we use two containers, one for the PostgreSQL database and one for Redis
 * The `config/master.key` file
 
 ### First Time Setting Up
@@ -93,8 +94,21 @@ Do you need to edit some secrets?  Do it from the command line:
 $ rails credentials:edit
 ```
 
+### Keys in `config/credentials.yml.enc`
+
+`secret_key_base` - used by Rails in many ways (e.g. BCrypt)
+
+`secret_jwt_encryption_key` - used by JWT & JWT_Sessions to create access & refresh tokens
+
 ----
 
 ## Deployment
 
 _Coming soon_
+
+## Contributing
+
+Team members, create a branch and pull request.
+
+General Public: Fork and create pull request.
+

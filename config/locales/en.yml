@@ -48,7 +48,7 @@ en:
         browser_version: Browser Version
         device: Login Device Name
         expiring_at: Expires On
-        invalidated: Invalidated?
+        invalidated: Invalidated
         invalidated_by: Invalidated By
         ip_address: Login IP Address
         platform: Login From Platform
@@ -87,6 +87,13 @@ en:
       user:
         one: User
         other: Users
+
+  # feel free to add to the `errors.messages.*` pile that ships with Rails
+  # https://github.com/rails/rails/blob/master/activemodel/lib/active_model/locale/en.yml
+  # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/locale/en.yml
+  errors:
+    messages:
+      already_true: has already been set to true
 
   pundit:
     default: You are forbidden from performing this action

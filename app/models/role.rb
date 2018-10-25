@@ -4,7 +4,21 @@
 # by Pundit policies to determine whether the user in question is authorized (not authenticated) to execute
 # a specific controller action.
 class Role < ApplicationRecord
-  # TODO: before validate up_case the key?
+  # Callbacks
+  # --------------------------------------------------------------------------------------------------------------------
+
+  before_validation do
+    self.key = key.upcase
+  end
+
+  # Auto-Strip
+  # --------------------------------------------------------------------------------------------------------------------
+
+  auto_strip_attributes(
+    :key,
+    :name,
+    :notes
+  )
 
   # Validations
   # --------------------------------------------------------------------------------------------------------------------
