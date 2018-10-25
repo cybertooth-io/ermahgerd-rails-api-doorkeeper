@@ -3,6 +3,11 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
+  test 'when using the scope by id' do
+    assert_equal 1, User.by_id(users(:sterling_archer).id).count
+    assert_equal 2, User.by_id([users(:mallory_archer).id, users(:sterling_archer).id]).count
+  end
+
   test 'when a user has a session that user cannot be deleted' do
     sterling_archer = users(:sterling_archer)
     sterling_archer.destroy
