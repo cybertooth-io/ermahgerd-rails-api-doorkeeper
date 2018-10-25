@@ -6,7 +6,9 @@ module Api
       # This is a JSONAPI-Resources ready controller that tests authentication using JWTSessions and tests
       # authorization using Pundit policies.
       class BaseResourceController < ApplicationController
+        include CurrentUser
         include JSONAPI::ActsAsResourceController
+        include JWTSessions::RailsAuthorization
         include Pundit
 
         # :authorize_access_request! is part of JWTSessions and is all about ensuring valid `authenticated` requests

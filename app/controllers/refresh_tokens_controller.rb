@@ -11,6 +11,9 @@
 # to refresh an access token prior to its expiry will be flush the session and produce a 401 UNAUTHORIZED response
 # that will describe the refresh attempt as 'Malicious activity detected'.
 class RefreshTokensController < ApplicationController
+  include CurrentUser
+  include JWTSessions::RailsAuthorization
+
   # first authorize the request (CSRF etc.)
   before_action :authorize_refresh_by_access_request!
   # second authorize that the refresh token has not expired
