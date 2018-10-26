@@ -35,7 +35,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
     tokens = JSON.parse(response.body)
     assert tokens['access'].present?
-    refute tokens['refresh'].present?
+    assert_not tokens['refresh'].present?
   end
 
   test 'when logging out without a session' do
@@ -54,7 +54,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 15.minutes.from_now
 
-    refute mallory_archer.sessions.first.invalidated?
+    assert_not mallory_archer.sessions.first.invalidated?
 
     delete token_logout_url, headers: @headers
 

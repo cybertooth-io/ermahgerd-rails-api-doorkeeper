@@ -26,6 +26,9 @@ Rails.application.routes.draw do
         end
         jsonapi_resources :users
       end
+      namespace :public do
+        jsonapi_resources :roles
+      end
     end
   end
 end

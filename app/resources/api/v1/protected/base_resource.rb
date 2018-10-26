@@ -3,8 +3,7 @@
 module Api
   module V1
     module Protected
-      # All resources that wish to be restricted via pundit policies should inherit from this abstract
-      # JSONAPI::Resource
+      # A Pundit-Scoped resource used in conjuntion with its namespaced policy.
       # This resource makes a point of not permitting the create/update of the `created_at` or `updated_at` fields.
       class BaseResource < JSONAPI::Resource
         include JSONAPI::Authorization::PunditScopedResource

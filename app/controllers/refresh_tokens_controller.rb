@@ -39,10 +39,10 @@ class RefreshTokensController < ApplicationController
   private
 
   def authorize_refresh_not_expired!
-    raise JWTSessions::Errors::Unauthorized, 'Session has expired' if Time.now > refresh_token_expiration
+    raise JWTSessions::Errors::Unauthorized, 'Session has expired' if Time.now.to_i > refresh_token_expiration
   end
 
   def refresh_token_expiration
-    Time.at(JWTSessions::RefreshToken.find(claimless_payload['ruid'], JWTSessions.token_store).expiration.to_i)
+    JWTSessions::RefreshToken.find(claimless_payload['ruid'], JWTSessions.token_store).expiration.to_i
   end
 end

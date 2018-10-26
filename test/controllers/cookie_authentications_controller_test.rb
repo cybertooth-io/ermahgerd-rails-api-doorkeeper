@@ -9,7 +9,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :not_found
-    refute cookies[JWTSessions.access_cookie].present?
+    assert_not cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in fails because the password is missing' do
@@ -18,7 +18,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unauthorized
-    refute cookies[JWTSessions.access_cookie].present?
+    assert_not cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in fails because the email and password do not match' do
@@ -27,7 +27,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :unauthorized
-    refute cookies[JWTSessions.access_cookie].present?
+    assert_not cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging in is successful' do
@@ -58,7 +58,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     delete cookie_logout_url, headers: @headers
 
     assert_response :no_content
-    refute cookies[JWTSessions.access_cookie].present?
+    assert_not cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging out successfully the Session invalidated fields are updated' do
@@ -70,7 +70,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 15.minutes.from_now
 
-    refute mallory_archer.sessions.first.invalidated?
+    assert_not mallory_archer.sessions.first.invalidated?
 
     delete cookie_logout_url, headers: @headers
 

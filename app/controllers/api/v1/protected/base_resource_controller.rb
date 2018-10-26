@@ -35,7 +35,7 @@ module Api
 
           if session.present?
             return RecordSessionActivityWorker.perform_async(
-              Time.now.iso8601,
+              Time.zone.now.iso8601,
               request.remote_ip,
               request.path,
               session.id
