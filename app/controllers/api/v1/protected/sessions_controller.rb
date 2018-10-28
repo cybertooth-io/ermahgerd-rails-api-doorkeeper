@@ -9,24 +9,26 @@ module Api
       #
       # An `invalidate` action has been added to this controller.  This allows sessions to be destroyed
       # application-side for security reasons.
-      class SessionsController < ApplicationController
-        include JSONAPI::ActsAsResourceController
-
-        before_action :authorize_access_request!
-
+      class SessionsController < BaseResourceController
         def invalidate
           # TODO: protect this action using Pundit so that only Administrator role can do it
           session = Session.find_by!(id: params[:id])
+
+          authorize session # pundit authorization
 
           jwt_session = JWTSessions::Session.new(payload: payload)
 
           # TODO: the following flush will throw an JWTSessions::Errors::Unauthorized exception if the refresh token
           # cannot be found; what should we do?
-          jwt_session.flush_by_uid(session.ruid)
+          begin
+            jwt_session.flush_by_uid(session.ruid)
 
-          session.update!(invalidated: true, invalidated_by: current_user)
+            session.update!(invalidated: true, invalidated_by: current_user)
 
-          render json: { data: {}, meta: {} }, status: :no_content
+            render json: { data: {}, meta: {} }, status: :no_content
+          rescue JWTSessions::Errors::Unauthorized => exception
+            not_found exception
+          end
         end
       end
     end

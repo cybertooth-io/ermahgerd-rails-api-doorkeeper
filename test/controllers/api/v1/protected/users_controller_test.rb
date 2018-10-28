@@ -13,33 +13,33 @@ module Api
         end
 
         test 'when logging in to get authorized access to the index action' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           get api_v1_protected_users_url
 
           assert_response :ok
-          assert_equal 2, ::JSON.parse(response.body)['data'].length
+          assert_equal 5, ::JSON.parse(response.body)['data'].length
         end
 
-        test 'when accessing resource one second before access token expires' do
+        test 'when accessing resource a few seconds before access token expires' do
           Timecop.freeze
 
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
-          Timecop.travel((JWTSessions.access_exp_time - 1).seconds.from_now)
+          Timecop.travel((JWTSessions.access_exp_time - 3).seconds.from_now)
 
           get api_v1_protected_users_url
 
           assert_response :ok
-          assert_equal 2, ::JSON.parse(response.body)['data'].length
+          assert_equal 5, ::JSON.parse(response.body)['data'].length
         end
 
-        test 'when accessing resource one second after access token expires' do
+        test 'when accessing resource a few seconds after access token expires' do
           Timecop.freeze
 
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
-          Timecop.travel((JWTSessions.access_exp_time + 1).seconds.from_now)
+          Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
 
           get api_v1_protected_users_url
 
@@ -48,7 +48,7 @@ module Api
         end
 
         test 'when show' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           get api_v1_protected_user_url(users(:mallory_archer))
 
@@ -57,7 +57,7 @@ module Api
         end
 
         test 'when destroy without specifying a CSRF token in the header' do
-          login(users(:sterling_archer))
+          login(users(:some_administrator))
 
           assert_no_difference ['User.count'] do
             delete api_v1_protected_user_url(users(:mallory_archer))
@@ -66,14 +66,24 @@ module Api
           assert_response :unauthorized
         end
 
-        test 'when destroy' do
-          login(users(:sterling_archer))
+        test 'when destroy by a permited user' do
+          login(users(:some_administrator))
 
           assert_difference ['User.count'], -1 do
             delete api_v1_protected_user_url(users(:mallory_archer)), headers: @headers
           end
 
           assert_response :no_content
+        end
+
+        test 'when index by authenticated administrator the session activity is recorded' do
+          login(users(:some_administrator))
+
+          assert_difference ['RecordSessionActivityWorker.jobs.size'] do
+            get api_v1_protected_users_url, headers: @headers
+          end
+
+          assert_response :ok
         end
       end
     end

@@ -5,7 +5,7 @@ module Api
     module Protected
       # Protected access to the `Session` model.
       # Note that the RUID is not ever exposed or sent to through the wire.
-      class SessionResource < JSONAPI::Resource
+      class SessionResource < BaseResource
         immutable # no CUD through controller
 
         # Attributes
@@ -15,16 +15,24 @@ module Api
         attributes(
           :browser,
           :browser_version,
-          :created_at,
           :device,
           :expiring_at,
           :invalidated,
           :ip_address,
           :platform,
           :platform_version,
-          :updated_at,
           {}
         )
+
+        # http://jsonapi-resources.com/v0.9/guide/resources.html#Creatable-and-Updatable-Attributes
+        def self.updatable_fields(_context)
+          [] # immutable
+        end
+
+        # http://jsonapi-resources.com/v0.9/guide/resources.html#Creatable-and-Updatable-Attributes
+        def self.creatable_fields(_context)
+          [] # immutable
+        end
 
         # Relationships
         # --------------------------------------------------------------------------------------------------------------

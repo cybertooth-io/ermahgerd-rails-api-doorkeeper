@@ -4,6 +4,7 @@ sterling_archer:
   last_name: Archer
   nickname: Duchess
   password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+  roles: [guest]
 
 mallory_archer:
   email: mallory@isiservice.com
@@ -11,4 +12,29 @@ mallory_archer:
   last_name: Archer
   nickname:
   password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+  roles: [guest]
+
+some_administrator:
+  email: admin@pundit.com
+  first_name: Some
+  last_name: Admin
+  nickname:
+  password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+  roles: [administrator]
+
+some_other_administrator:
+  email: other-admin@pundit.com
+  first_name: Other
+  last_name: Admin
+  nickname:
+  password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+  roles: [administrator]
+
+some_guest:
+  email: guest@pundit.com
+  first_name: Some
+  last_name: Guest
+  nickname:
+  password_digest: <%= BCrypt::Password.create("secret", cost: 4) %>
+  roles: [guest]
 

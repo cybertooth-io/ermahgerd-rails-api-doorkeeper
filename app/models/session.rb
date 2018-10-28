@@ -4,6 +4,17 @@
 # The `RUID` is what binds the session information stored in the database with what is stored inside of Redis
 # by `JWTSessions`.
 class Session < ApplicationRecord
+  # Auto-Strip
+  # --------------------------------------------------------------------------------------------------------------------
+
+  auto_strip_attributes(
+    :browser,
+    :browser_version,
+    :device,
+    :platform,
+    :platform_version
+  )
+
   # Validations
   # --------------------------------------------------------------------------------------------------------------------
 
@@ -20,10 +31,26 @@ class Session < ApplicationRecord
     presence: true
   )
 
+  validates(
+    :invalidated_by,
+    presence: true,
+    on: :update
+  )
+
+  # boolean presence check...crazy I know (http://stackoverflow.com/a/4721574/545137)
+  validates :invalidated, inclusion: { in: [true, false] }
+
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
 
   belongs_to :invalidated_by, class_name: 'User', optional: true
 
   belongs_to :user
+
+  has_many :session_activities, dependent: :destroy
+
+  # Scopes
+  # --------------------------------------------------------------------------------------------------------------------
+
+  scope :by_user, ->(ids) { where user_id: ids }
 end
