@@ -51,6 +51,7 @@ If you're creating Sidekiq jobs please use the generator: `rails g sidekiq:worke
 1. Create a model with its **singular name**: `rails g model role key:string name:string notes:text`
     1. Edit the migration to ensure the `default` and `null` values are defined
     1. Add validations, relationships, scopes, etc. to the new model class
+    1. Is the model audited?  Yes, then add the `audited` declaration to the model class
     1. Add test fixture data accordingly to `test/fixtures/*.yml` (keep it general and un-crazy)
     1. Unit test accordingly
     1. Add the model information to the `config/locales/*.yml` file(s)
