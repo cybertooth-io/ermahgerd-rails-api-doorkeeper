@@ -25,7 +25,7 @@ class RefreshTokensController < ApplicationController
 
       session.flush_by_access_payload
 
-      # TODO: do we need to trigger an email to inform of malicious activity?
+      # TODO: do we need to trigger an email to inform of malicious activity? See #22
 
       raise JWTSessions::Errors::Unauthorized, 'Malicious activity detected'
     end
