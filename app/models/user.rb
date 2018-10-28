@@ -5,6 +5,7 @@
 # the `password_digest` column.
 class User < ApplicationRecord
   has_secure_password
+  audited
 
   # Callbacks
   # --------------------------------------------------------------------------------------------------------------------
