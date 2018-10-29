@@ -3,7 +3,7 @@
 # The default Pundit policy; in fact Pundit generated this for us.
 #
 # I've commented the update? method because it's special as `JSONAPI-AUTHORIZATION` gem uses this method to
-# test whether releated resources can be created, updated, or destroyed.
+# test whether related resources can be created, updated, or destroyed.
 #
 # I've also added a keen helper method named `scope` that can be used by inheriting classes to grab a
 # reference to the records that are subject to authorization.  You can then do things like test whether

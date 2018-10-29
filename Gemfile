@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 
+# ----------------------------------------------------------------------------------------------------------------------
+# Visit https://github.com/ankane/production_rails for suggestions to improve the api app
+# ----------------------------------------------------------------------------------------------------------------------
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -62,6 +66,15 @@ gem 'sidekiq', '~> 5.2'
 
 # Strong Passwords if you want (https://github.com/bdmac/strong_password)
 # gem 'strong_password', '~> 0.0.6'
+
+# Catch unsafe migrations at dev time (https://github.com/ankane/strong_migrations)
+gem 'strong_migrations'
+
+# Audited is an ORM extension that logs all changes to your models (https://github.com/collectiveidea/audited)
+gem 'audited', '~> 4.7'
+
+# Rack::Timeout enhancements for Rails (https://github.com/ankane/slowpoke)
+gem 'slowpoke'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console

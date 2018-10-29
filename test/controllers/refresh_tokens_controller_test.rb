@@ -68,7 +68,7 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
 
     token(users(:some_administrator))
 
-    Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
+    Timecop.travel((JWTSessions.access_exp_time + JWTSessions.jwt_options.leeway + 3).seconds.from_now)
 
     # delete should fail because access token is expired
     assert_no_difference ['User.count'] do

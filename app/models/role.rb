@@ -4,6 +4,8 @@
 # by Pundit policies to determine whether the user in question is authorized (not authenticated) to execute
 # a specific controller action.
 class Role < ApplicationRecord
+  audited
+
   # Callbacks
   # --------------------------------------------------------------------------------------------------------------------
 

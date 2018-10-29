@@ -17,7 +17,7 @@ module Api
 
         private
 
-        # In JSONAPI the `context` function returns a hash that is available at very lifecycle moments in the JSONAPI
+        # In JSONAPI the `context` function returns a hash that is available at every lifecycle moments in the JSONAPI
         # implementation.  For Pundit in particular, it needs the current_user in order to authorize access to
         # controller actions.
         def context

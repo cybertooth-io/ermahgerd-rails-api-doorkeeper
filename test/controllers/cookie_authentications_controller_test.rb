@@ -51,11 +51,26 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     login(users(:mallory_archer))
 
-    Timecop.travel 15.minutes.from_now
+    Timecop.travel 30.seconds.from_now
 
     assert cookies[JWTSessions.access_cookie].present?
 
     delete cookie_logout_url, headers: @headers
+
+    assert_response :no_content
+    refute cookies[JWTSessions.access_cookie].present?
+  end
+
+  test 'when logging out successfully using the post method' do
+    Timecop.freeze
+
+    login(users(:mallory_archer))
+
+    Timecop.travel 30.seconds.from_now
+
+    assert cookies[JWTSessions.access_cookie].present?
+
+    post cookie_logout_url, headers: @headers
 
     assert_response :no_content
     refute cookies[JWTSessions.access_cookie].present?
@@ -68,7 +83,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     login(mallory_archer)
 
-    Timecop.travel 15.minutes.from_now
+    Timecop.travel 30.seconds.from_now
 
     refute mallory_archer.sessions.first.invalidated?
 
