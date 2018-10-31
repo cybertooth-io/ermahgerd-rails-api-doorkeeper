@@ -33,6 +33,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     end
 
     assert_response :created
+
     tokens = JSON.parse(response.body)
     assert tokens['access'].present?
     assert_not tokens['refresh'].present?
@@ -52,11 +53,29 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     token(mallory_archer)
 
-    Timecop.travel 15.minutes.from_now
+    Timecop.travel 30.seconds.from_now
 
     assert_not mallory_archer.sessions.first.invalidated?
 
     delete token_logout_url, headers: @headers
+
+    assert_response :no_content
+    assert mallory_archer.sessions.first.invalidated?
+    assert mallory_archer.sessions.first.invalidated_by.present?
+  end
+
+  test 'when logging out successfully with the post method' do
+    Timecop.freeze
+
+    mallory_archer = users(:mallory_archer)
+
+    token(mallory_archer)
+
+    Timecop.travel 30.seconds.from_now
+
+    refute mallory_archer.sessions.first.invalidated?
+
+    post token_logout_url, headers: @headers
 
     assert_response :no_content
     assert mallory_archer.sessions.first.invalidated?
@@ -68,7 +87,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     token(users(:sterling_archer))
 
-    Timecop.travel 15.minutes.from_now
+    Timecop.travel 30.seconds.from_now
 
     get api_v1_protected_users_url, headers: @headers
 
@@ -81,7 +100,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     token(users(:some_administrator))
 
-    Timecop.travel 15.minutes.from_now
+    Timecop.travel 30.seconds.from_now
 
     get api_v1_protected_users_url, headers: @headers
 

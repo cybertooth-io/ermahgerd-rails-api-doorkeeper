@@ -39,7 +39,7 @@ module Api
 
           login(users(:some_administrator))
 
-          Timecop.travel((JWTSessions.access_exp_time + 3).seconds.from_now)
+          Timecop.travel((JWTSessions.access_exp_time + JWTSessions.jwt_options.leeway + 3).seconds.from_now)
 
           get api_v1_protected_users_url
 
