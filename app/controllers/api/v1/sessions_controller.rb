@@ -19,11 +19,15 @@ module Api
         begin
           jwt_session.flush_by_uid(session.ruid)
 
-          session.update!(invalidated: true, invalidated_by: current_user)
-
           render json: { data: {}, meta: {} }, status: :no_content
         rescue JWTSessions::Errors::Unauthorized => exception
+
           not_found exception
+
+        ensure
+
+          session.update!(invalidated: true, invalidated_by: current_user)
+
         end
       end
     end
