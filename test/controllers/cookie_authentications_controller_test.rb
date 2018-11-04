@@ -73,7 +73,7 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     post cookie_logout_url, headers: @headers
 
     assert_response :no_content
-    refute cookies[JWTSessions.access_cookie].present?
+    assert_not cookies[JWTSessions.access_cookie].present?
   end
 
   test 'when logging out successfully the Session invalidated fields are updated' do

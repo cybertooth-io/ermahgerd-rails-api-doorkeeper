@@ -72,7 +72,7 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
 
     # delete should fail because access token is expired
     assert_no_difference ['User.count'] do
-      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: @headers
+      delete api_v1_user_url(users(:mallory_archer).id), headers: @headers
     end
     assert_response :unauthorized
 
@@ -88,7 +88,7 @@ class RefreshTokensControllerTest < ActionDispatch::IntegrationTest
 
     # now attempt to delete with the renewed access token
     assert_difference ['User.count'], -1 do
-      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: new_headers
+      delete api_v1_user_url(users(:mallory_archer).id), headers: new_headers
     end
     assert_response :no_content, 'Delete was successful'
   end

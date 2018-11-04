@@ -17,20 +17,15 @@ Rails.application.routes.draw do
 
   namespace :api, constraints: { format: :json } do
     namespace :v1 do
-      namespace :protected do
-        jsonapi_resources :roles
-        jsonapi_resources :session_activities
-        jsonapi_resources :sessions do
-          member do
-            patch :invalidate
-            put :invalidate
-          end
+      jsonapi_resources :roles
+      jsonapi_resources :session_activities
+      jsonapi_resources :sessions do
+        member do
+          patch :invalidate
+          put :invalidate
         end
-        jsonapi_resources :users
       end
-      namespace :public do
-        jsonapi_resources :roles
-      end
+      jsonapi_resources :users
     end
   end
 end
