@@ -12,8 +12,6 @@
 #
 # The `current_user` method will get a reference to the authenticated `User` instance.
 class ApplicationController < ActionController::API
-  include CurrentUser
-  include JWTSessions::RailsAuthorization
   include RescueFromForbidden
   include RescueFromRecordNotFound
   include RescueFromUnauthorized

@@ -6,7 +6,7 @@ class RecordSessionActivityWorker
 
   def perform(created_at_iso8601, ip_address, path, session_id)
     SessionActivity.create!(
-      created_at: Time.parse(created_at_iso8601),
+      created_at: Time.zone.parse(created_at_iso8601),
       ip_address: ip_address,
       path: path,
       session_id: session_id

@@ -32,7 +32,7 @@ module ActiveSupport
       post cookie_login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: user.email, password: password }
 
       @csrf_token = ::JSON.parse(response.body)['csrf']
-      @headers = {}
+      @headers = { 'Content-Type': JSONAPI::MEDIA_TYPE }
       @headers[JWTSessions.csrf_header] = @csrf_token
     end
 
@@ -48,7 +48,7 @@ module ActiveSupport
       post token_login_url, headers: { 'User-Agent': USER_AGENT }, params: { email: user.email, password: password }
 
       @access_token = ::JSON.parse(response.body)['access']
-      @headers = {}
+      @headers = { 'Content-Type': JSONAPI::MEDIA_TYPE }
       @headers[JWTSessions.access_header] = @access_token
     end
   end

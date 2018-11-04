@@ -10,6 +10,9 @@
 # is important to note that the RUID to the refresh token stored in Redis is recorded to the `Session`.  Doing this
 # allows a session to be identified and potentially invalidated by the owning user or administrators.
 class TokenAuthenticationsController < ApplicationController
+  include CurrentUser
+  include JWTSessions::RailsAuthorization
+
   before_action :authorize_access_request!, only: [:destroy]
 
   # login

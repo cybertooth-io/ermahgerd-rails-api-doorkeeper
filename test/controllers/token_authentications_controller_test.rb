@@ -36,7 +36,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     tokens = JSON.parse(response.body)
     assert tokens['access'].present?
-    refute tokens['refresh'].present?
+    assert_not tokens['refresh'].present?
   end
 
   test 'when logging out without a session' do
@@ -55,7 +55,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 30.seconds.from_now
 
-    refute mallory_archer.sessions.first.invalidated?
+    assert_not mallory_archer.sessions.first.invalidated?
 
     delete token_logout_url, headers: @headers
 
@@ -73,7 +73,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 30.seconds.from_now
 
-    refute mallory_archer.sessions.first.invalidated?
+    assert_not mallory_archer.sessions.first.invalidated?
 
     post token_logout_url, headers: @headers
 
@@ -89,7 +89,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 30.seconds.from_now
 
-    get api_v1_protected_users_url, headers: @headers
+    get api_v1_users_url, headers: @headers
 
     assert_response :forbidden
     assert_equal 'You are forbidden from performing this action', JSON.parse(response.body)['errors'].first['detail']
@@ -102,7 +102,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
 
     Timecop.travel 30.seconds.from_now
 
-    get api_v1_protected_users_url, headers: @headers
+    get api_v1_users_url, headers: @headers
 
     assert_response :ok
     assert_equal 5, JSON.parse(response.body)['data'].length

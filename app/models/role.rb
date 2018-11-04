@@ -10,7 +10,7 @@ class Role < ApplicationRecord
   # --------------------------------------------------------------------------------------------------------------------
 
   before_validation do
-    self.key = key.upcase
+    self.key = key.upcase if key.present?
   end
 
   # Auto-Strip
@@ -32,7 +32,9 @@ class Role < ApplicationRecord
   # Relationships
   # --------------------------------------------------------------------------------------------------------------------
 
+  # rubocop:disable Rails/HasAndBelongsToMany
   has_and_belongs_to_many :users
+  # rubocop:enable Rails/HasAndBelongsToMany
 
   # Scopes
   # --------------------------------------------------------------------------------------------------------------------

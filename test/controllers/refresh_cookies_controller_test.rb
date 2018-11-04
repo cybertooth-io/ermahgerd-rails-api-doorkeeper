@@ -60,14 +60,14 @@ class RefreshCookiesControllerTest < ActionDispatch::IntegrationTest
 
     # attempt to delete user with old CSRF token (@headers has not been updated since call to `login(...)`)
     assert_no_difference ['User.count'] do
-      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: @headers
+      delete api_v1_user_url(users(:mallory_archer).id), headers: @headers
     end
 
     assert_response :unauthorized, 'CSRF token mismatch should have been detected'
 
     # now attempt to delete with the newly issued CSRF
     assert_difference ['User.count'], -1 do
-      delete api_v1_protected_user_url(users(:mallory_archer).id), headers: new_headers
+      delete api_v1_user_url(users(:mallory_archer).id), headers: new_headers
     end
 
     assert_response :no_content, 'Re-issued CSRF token was used, delete should complete successfully'

@@ -20,5 +20,8 @@ Metrics/LineLength:
 Metrics/MethodLength:
   Max: 30
 
+Rails:
+  Enabled: true
+
 Style/ClassAndModuleChildren:
   AutoCorrect: true
