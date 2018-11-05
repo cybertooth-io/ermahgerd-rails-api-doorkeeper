@@ -2,12 +2,10 @@
 <html>
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-  <style>
-    /* Email styles need to be inline */
-  </style>
+  <%= stylesheet_link_tag "application-mailer", media: "all" %>
 </head>
 
-<body>
+<body class="body bg-light">
 <%= yield %>
 </body>
 </html>

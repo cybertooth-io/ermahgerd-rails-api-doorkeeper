@@ -30,6 +30,9 @@
 # available at http://guides.rubyonrails.org/i18n.html.
 
 en:
+  # Active Record table and column names
+  # --------------------------------------------------------------------------------------------------------------------
+
   activerecord:
     # table column labels should be defined here
     attributes:
@@ -88,12 +91,25 @@ en:
         one: User
         other: Users
 
+  # Invitations mailer subjects
+  # --------------------------------------------------------------------------------------------------------------------
+
+  invitations_mailer:
+    set_password:
+      subject: Invitation - Set Your Password
+
+  # Error Messages
+  # --------------------------------------------------------------------------------------------------------------------
+
   # feel free to add to the `errors.messages.*` pile that ships with Rails
   # https://github.com/rails/rails/blob/master/activemodel/lib/active_model/locale/en.yml
   # https://github.com/rails/rails/blob/master/activerecord/lib/active_record/locale/en.yml
   errors:
     messages:
       already_true: has already been set to true
+
+  # Pundit message customization
+  # --------------------------------------------------------------------------------------------------------------------
 
   pundit:
     default: You are forbidden from performing this action

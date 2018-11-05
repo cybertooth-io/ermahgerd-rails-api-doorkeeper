@@ -4,8 +4,7 @@
 
 JWTSessions.access_exp_time = ENV.fetch('ACCESS_EXP_TIME') { 300 } # 300 seconds (5 minutes)
 
-# TODO: try HS512? #23
-JWTSessions.algorithm = 'HS256'
+JWTSessions.algorithm = 'HS512'
 
 JWTSessions.encryption_key = Rails.application.credentials.dig(:secret_jwt_encryption_key)
 
