@@ -76,6 +76,11 @@ If you're creating Sidekiq jobs please use the generator: `rails g sidekiq:worke
     1. Add the controller's end points to the `config/routes.rb` file; use `jsonapi_resources` helper :-)
     1. Unit test accordingly (e.g. confirm returned payload only contains the fields specified in the resource)
 
+### Commiting Code
+
+1. Use a branch and a pull request into master.
+1. Run `rubocop -a` prior to commits to make sure your code conforms to the formatting and linting.
+
 ----
 
 ## Configuration Notes
