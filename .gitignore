@@ -32,3 +32,6 @@
 # exclude redis data
 /redis
 /.gtm/
+
+# ignore IDEA folder
+/.idea
