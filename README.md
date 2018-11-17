@@ -113,9 +113,11 @@ $ rails credentials:edit
 
 ## Releasing
 
-1. Edit the `config/application.rb`'s version property.
+1. Confirm (and edit) the `config/application.rb`'s version property.
 1. Commit.
 1. Tag: `git tag v#.#.#`
+1. Edit the `config/application.rb`'s version property.
+1. Commit & push everything.
 
 ----
 
