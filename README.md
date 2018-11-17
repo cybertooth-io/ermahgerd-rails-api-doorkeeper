@@ -1,4 +1,4 @@
-# README  - cppdist-com-rails
+# README  - ermahgerd-rails-api-jwt
          
 The Rails API server for Canadian Pump & Packing Distribution.  Serves up JSONAPI payloads for an EmberJs SPA
 over at [https://github.com/cybertooth-io/ccpdist-com-emberjs](https://github.com/cybertooth-io/ccpdist-com-emberjs).

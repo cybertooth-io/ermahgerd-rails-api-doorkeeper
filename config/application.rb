@@ -19,7 +19,7 @@ require 'rails/test_unit/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module CppdistComRails
+module ErmahgerdRailsApiJwt
   # The rails application.  Note the name of the module this belongs too.  If you duplicate repos you will want to
   # adjust this module name.
   class Application < Rails::Application
