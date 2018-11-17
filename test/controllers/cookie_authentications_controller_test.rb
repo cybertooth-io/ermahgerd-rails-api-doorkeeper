@@ -93,4 +93,30 @@ class CookieAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     assert mallory_archer.sessions.first.invalidated?
     assert mallory_archer.sessions.first.invalidated_by.present?
   end
+
+  test 'when access to the protected users index route is forbidden for a guest user' do
+    Timecop.freeze
+
+    login(users(:sterling_archer))
+
+    Timecop.travel 30.seconds.from_now
+
+    get api_v1_users_url, headers: @headers
+
+    assert_response :forbidden
+    assert_equal 'You are forbidden from performing this action', JSON.parse(response.body)['errors'].first['detail']
+  end
+
+  test 'when access to the protected users index route is granted for an administrator user' do
+    Timecop.freeze
+
+    login(users(:some_administrator))
+
+    Timecop.travel 30.seconds.from_now
+
+    get api_v1_users_url, headers: @headers
+
+    assert_response :ok
+    assert_equal 5, JSON.parse(response.body)['data'].length
+  end
 end

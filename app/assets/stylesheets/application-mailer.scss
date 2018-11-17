@@ -1,2 +1,7 @@
+/**
+ * This SASS file is used to create our Bootstrap 4 emails.
+ * Keep in mind this is a Rails API application; we needed to uncomment `require 'sprockets/railtie'`
+ * in `config/application.rb`
+ */
 //noinspection CssUnknownTarget
 @import 'bootstrap-email';

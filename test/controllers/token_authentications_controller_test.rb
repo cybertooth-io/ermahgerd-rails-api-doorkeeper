@@ -82,7 +82,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     assert mallory_archer.sessions.first.invalidated_by.present?
   end
 
-  test 'when access to a protected resource with token authentication is forbidden' do
+  test 'when access to the protected users index route is forbidden for a guest user' do
     Timecop.freeze
 
     token(users(:sterling_archer))
@@ -95,7 +95,7 @@ class TokenAuthenticationsControllerTest < ActionDispatch::IntegrationTest
     assert_equal 'You are forbidden from performing this action', JSON.parse(response.body)['errors'].first['detail']
   end
 
-  test 'when accessing a protected resource with token authentication is permitted' do
+  test 'when access to the protected users index route is granted for an administrator user' do
     Timecop.freeze
 
     token(users(:some_administrator))
