@@ -38,5 +38,7 @@ module ErmahgerdRailsApiJwt
 
     # Whether or not to record `SessionActivity` in the `BaseResourceController`
     config.record_session_activity = ENV.fetch('RECORD_SESSION_ACTIVITY') { true }
+
+    config.version = '0.0.1-rc.1'
   end
 end
