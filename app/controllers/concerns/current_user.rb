@@ -16,6 +16,8 @@ module CurrentUser
     # against
     def current_user
       @current_user ||= User.includes(:roles).find_by(id: payload['user_id'])
+      # TODO: for Doorkeeper
+      # @current_user ||= User.includes(:roles).find_by(id: doorkeeper_token.resource_owner_id)
     end
   end
 end

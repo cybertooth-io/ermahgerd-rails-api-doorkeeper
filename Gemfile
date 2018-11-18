@@ -40,6 +40,7 @@ gem 'seed-fu', '~> 2.3'
 
 # Authentication
 # ----------------------------------------------------------------------------------------------------------------------
+gem 'doorkeeper', '~> 5.0.0'
 gem 'jwt_sessions', '~> 2.2.1'
 
 # Authorization
@@ -124,6 +125,7 @@ group :development do
 end
 
 group :test do
+  gem 'oauth2'
   gem 'timecop', '~> 0.9'
 end
 

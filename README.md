@@ -1,4 +1,4 @@
-# README  - ermahgerd-rails-api-jwt
+# README  - ermahgerd-rails-api-doorkeeper
          
 The Rails API server for Canadian Pump & Packing Distribution.  Serves up JSONAPI payloads for an EmberJs SPA
 over at [https://github.com/cybertooth-io/ccpdist-com-emberjs](https://github.com/cybertooth-io/ccpdist-com-emberjs).
@@ -108,6 +108,12 @@ $ rails credentials:edit
 `secret_key_base` - used by Rails in many ways (e.g. BCrypt)
 
 `secret_jwt_encryption_key` - used by JWT & JWT_Sessions to create access & refresh tokens
+
+----
+
+## Configuring Doorkeeper (OAUTH2)
+
+_Coming soon_
 
 ----
 

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  use_doorkeeper
   # Sidekiq Console
   # RTFM: https://github.com/mperham/sidekiq/wiki/Monitoring#rails
   # require 'sidekiq/web'

@@ -6,12 +6,18 @@ module Api
     # authorization using Pundit policies.
     class BaseJsonapiResourcesController < ApplicationController
       include CurrentUser
+      # TODO: for Doorkeeper
+      # include Doorkeeper::Rails::Helpers
       include JSONAPI::ActsAsResourceController
       include JWTSessions::RailsAuthorization
       include Pundit
 
       # :authorize_access_request! is part of JWTSessions and is all about ensuring valid `authenticated` requests
       before_action :authorize_access_request!
+
+      # user must be authenticated using OAUTH2 grant from Doorkeeper
+      # TODO: for Doorkeeper
+      # before_action :doorkeeper_authorize!
 
       # got this far, let's record this request in the `SessionActivity` table
       before_action :record_session_activity

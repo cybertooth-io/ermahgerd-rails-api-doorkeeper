@@ -45,6 +45,24 @@ class User < ApplicationRecord
   has_and_belongs_to_many :roles
   # rubocop:enable Rails/HasAndBelongsToMany
 
+  # Doorkeeper OAUTH2 tables
+  has_many(
+    :access_grants,
+    class_name: 'Doorkeeper::AccessGrant',
+    foreign_key: :resource_owner_id,
+    dependent: :destroy,
+    inverse_of: false
+  )
+
+  # Doorkeeper OAUTH2 tables
+  has_many(
+    :access_tokens,
+    class_name: 'Doorkeeper::AccessToken',
+    foreign_key: :resource_owner_id,
+    dependent: :destroy,
+    inverse_of: false
+  )
+
   has_many :sessions, dependent: :restrict_with_error
 
   # Scopes

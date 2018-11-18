@@ -19,7 +19,7 @@ require 'rails/test_unit/railtie'
 # you've limited to :test, :development, or :production.
 Bundler.require(*Rails.groups)
 
-module ErmahgerdRailsApiJwt
+module ErmahgerdRailsApiDoorkeeper
   # The rails application.  Note the name of the module this belongs too.  If you duplicate repos you will want to
   # adjust this module name.
   class Application < Rails::Application
@@ -39,6 +39,6 @@ module ErmahgerdRailsApiJwt
     # Whether or not to record `SessionActivity` in the `BaseResourceController`
     config.record_session_activity = ENV.fetch('RECORD_SESSION_ACTIVITY') { true }
 
-    config.version = '0.0.1-rc.2'
+    config.version = '0.0.1-rc.1'
   end
 end

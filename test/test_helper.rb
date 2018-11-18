@@ -20,6 +20,28 @@ module ActiveSupport
       Timecop.return
     end
 
+    def login_oauth_password(user, options = {})
+      password = options[:password] || 'secret' # default 'secret'
+
+      Rails.logger.info '------------------------------------------------------------------------------------------'
+      Rails.logger.info "OAUTH2 Password Authentication as #{user.email}"
+      Rails.logger.info '------------------------------------------------------------------------------------------'
+
+      # client = OAuth2::Client.new(nil, nil, :site => "http://www.example.com")
+      # access_token = client.password.get_token(user.email, password)
+      # puts access_token.token
+
+      post(
+        oauth_token_url,
+        headers: { 'User-Agent': USER_AGENT },
+        params: { grant_type: 'password', password: password, username: user.email }
+      )
+
+      @access_token = ::JSON.parse(response.body)['access_token']
+      @headers = { 'Content-Type': JSONAPI::MEDIA_TYPE }
+      @headers['Authorization'] = "Bearer #{@access_token}"
+    end
+
     # Helper to log a given user in with cookie based authentication
     # @return headers with the `X-CSRF-Token` assigned; you must pass this to your HTTP actions (e.g. `get v1_users_url, headers: @headers`)
     def login(user, options = {})
@@ -49,7 +71,7 @@ module ActiveSupport
 
       @access_token = ::JSON.parse(response.body)['access']
       @headers = { 'Content-Type': JSONAPI::MEDIA_TYPE }
-      @headers[JWTSessions.access_header] = @access_token
+      @headers[JWTSessions.access_header] = "Bearer #{@access_token}"
     end
   end
 end
